@@ -1,0 +1,15 @@
+index.js 文件 加入
+
+app.use(async (ctx,next) => {
+  try {
+    await next()
+  } catch (err) {
+    ctx.status = err.status || err.statusCode || 500
+    ctx.body = {
+      message: err.message
+    }
+  }
+})
+
+在controller中，可以自行抛出错误，如 ctx.throw(412, '先决条件失败，id大于等于数组长度')
+会被中间件捕捉到错误状态码及错误信息

@@ -1,0 +1,14 @@
+npm install koa-parameter --save
+
+然后再index.js中 
+const parameter = require('koa-parameter')
+app.use(parameter(app))
+
+使用方法 
+在方法中，对ctx使用插件的校验方法
+ctx.verifyParams({
+    name: {type: 'string', required: true},
+    age: {type: 'number', required: false}
+ })
+
+一旦参数错误会报422错误，并且返回详细的报错信息
