@@ -1,0 +1,19 @@
+jwt  全称JSON Web Token
+将各方之间的信息作为json对象进行安全传输
+经过数字签名，信息可以验证和信任
+
+JWT构成， 头部，有效载荷payload，签名（都会经过base64URL编码）
+头部： typ  token类型  固定JWT   alg   使用的hash算法  ，
+payload:   存储需要传递的信息，元数据(过期时间，发布人等)，payload可以加密
+签名：对头部和payload加上密钥进行算法加密
+
+前端登录后得到JWT，保存在localstorage中，在发送请求时，auth中带上JWT
+
+JWT有时效性的问题，可拓展性上比session好，符合restful 风格
+
+node中使用   npm i jsonwebtoken
+jwt = require('jsonwebtoken')
+jwt.sign({用户信息json},'密钥')   //  得到token,加密的token
+jwt.decode(token)                    //  直接得到用户信息，不验证密钥
+jwt.verify(token, '密钥')             //  验证密钥后，得到用户信息
+       

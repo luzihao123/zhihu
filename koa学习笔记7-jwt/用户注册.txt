@@ -1,0 +1,30 @@
+修改schema, 将查询不用显示的数据隐藏，加入密码字段
+const userSchema = new Schema({
+  __v: {type: Number, select: false},
+  name: { type: String, required: true },
+  password: { type: String, required: true, select: false},
+})
+在新建用户接口时候，加入用户名被占用时的验证，抛出409
+const { name } = ctx.request.body
+const repeatedUser = await User.findOne({name})
+if (repeatedUser) {ctx.throw(409,'用户被占用')}
+
+实现登录功能：
+路由中加入 router.post('/login', login)
+config中加入密钥字段   secret: 'zhihu-jwt-secret',
+controller中新建login方法，引入jsonwebtoken，使用sign方法，加入密钥，设置失效时间，生成token，在验证
+用户名和密码正确后，返回token
+使用mongoose中findOne方法查询
+const user = await User.findOne(ctx.request.body)
+if (!user) {ctx.throw(401, '用户名或密码不正确')}
+生成token，secret为配置文件中密钥，设置失效时间
+const token = jsonwebtoken.sign({_id, name}, secret, {expiresIn: '1d'})
+ctx.body = {token}
+
+手写修改，删除时候的中间件（用于验证是否为用户本人）
+在route中写一个中间件，从请求head的authorization中得到token，使用jsonwebtoken.verify方法得到json，传给ctx.state.user
+在具体controller中验证是否等于要修改的用户id
+
+
+插件koa-jwt可以直接实现路由中间件功能，而不需要自己手写，
+npm i koa-jwt --save,  然后修改route中user.js文件

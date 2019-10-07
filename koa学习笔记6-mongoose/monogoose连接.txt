@@ -1,0 +1,14 @@
+npm i mongoose --save
+使用atlas云数据库
+新建一个config.js  导出一个atlas中的连接字符串
+或者使用本地数据库
+在app.js 文件中
+const mongoose = require('mongoose')
+const { connectionStr } = require('./config')
+mongoose.connect(connectionStr,  { useNewUrlParser: true }, ()=>{
+  console.log('mongoDB 连接成功')
+})
+mongoose.connection.on('error', ()=> console.error)
+
+mongoose中先使用connect方法，第一个参数未连接字符串，第二个为配置属性，第三个为成功回调
+mongoose中监听连接时的方法，在error事件中打印
