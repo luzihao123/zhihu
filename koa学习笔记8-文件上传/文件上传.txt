@@ -1,0 +1,24 @@
+使用koa-body插件  卸载koa-bodyparser
+
+在index.js中启用中间件
+app.use(koaBody({
+  multipart: true,      // 开启文件上传
+  formidable: {
+    uploadDir: path.join(__dirname, '/public/uploads'),  // 上传的地址
+    keepExtensions: true    // 保留后缀名称
+  }
+}))
+
+然后直接在controller中写upload方法，
+const file = ctx.request.files.file   // 得到上传的文件
+ctx.body = { path: file.path }       // 得到地址
+
+使用koa-static 生成图片链接
+npm i koa-static --save
+引入后在index.js中使用中间件
+const koaStatic = require('koa-static')
+app.use(koaStatic(path.join(__dirname, 'public'))
+直接会把访问的静态资源生成链接
+在控制器中访问图片，修改原来方法
+ const basename = path.basename(file.path)
+ ctx.body = { url: `${ctx.origin}/uploads/${basename}`
