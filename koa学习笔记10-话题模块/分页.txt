@@ -1,0 +1,7 @@
+使用mongoose的分页功能limit() 每页数量   skip() 跳过数量
+接收两个参数   每页几个  第几页
+ctx.body = await Topic.find().limit(perPage).skip(page*perPage)
+
+搜索
+精确搜索：在find方法加入一个对象作为参数find({name:'xxx'})
+模糊搜索：find中加入正则 find({name: new RegExp(ctx.query.q)})
